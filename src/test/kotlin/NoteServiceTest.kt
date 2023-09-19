@@ -7,13 +7,13 @@ class NoteServiceTest {
     @Test
     fun addSuccsess() {
         val service = NoteService()
-        assertEquals(1,service.add("Заметка 1", "проверка add"))
+        assertEquals(1,service.add(Notes(title = "Заметка 1", text = "проверка add")))
     }
 
     @Test
     fun createCommentSuccess() {
         val service = NoteService()
-        service.add("Заметка 1", "проверка add")
+        service.add(Notes(title = "Заметка 1", text = "проверка add"))
         assertEquals(1,service.createComment(1,"проверка createComment"))
     }
 
@@ -26,7 +26,7 @@ class NoteServiceTest {
     @Test
     fun deleteSuccess() {
         val service = NoteService()
-        service.add("Заметка 1", "проверка add")
+        service.add(Notes(title = "Заметка 1", text = "проверка add"))
         assertEquals(1, service.delete(1))
 
     }
@@ -41,7 +41,7 @@ class NoteServiceTest {
     @Test
     fun deleteСommentSuccsess() {
         val service = NoteService()
-        service.add("Заметка 1", "проверка add")
+        service.add(Notes(title = "Заметка 1", text = "проверка add"))
         service.createComment(1,"проверка createComment")
         assertEquals(1,service.deleteСomment(1))
     }
@@ -55,7 +55,7 @@ class NoteServiceTest {
     @Test
     fun editSucsess() {
         val service = NoteService()
-        service.add("Заметка 1", "проверка add")
+        service.add(Notes(title = "Заметка 1", text = "проверка add"))
         assertEquals(1, service.edit(1,"Измененная заметка", "проверка edit"))
     }
 
@@ -68,7 +68,7 @@ class NoteServiceTest {
     @Test
     fun editCommentSuccess() {
         val service = NoteService()
-        service.add("Заметка 1", "проверка add")
+        service.add(Notes(title = "Заметка 1", text = "проверка add"))
         service.createComment(1,"проверка createComment")
         assertEquals(1,service.editComment(1, "текст"))
     }
@@ -76,7 +76,7 @@ class NoteServiceTest {
     @Test(expected = NoObjectFoundById::class)
     fun editCommentFailDueDeletedComment() {
         val service = NoteService()
-        service.add("Заметка 1", "проверка add")
+        service.add(Notes(title = "Заметка 1", text = "проверка add"))
         service.createComment(1,"проверка createComment")
         service.deleteСomment(1)
         service.editComment(1, "текст")
@@ -93,9 +93,9 @@ class NoteServiceTest {
     @Test
     fun getSuccess() {
         val service = NoteService()
-        service.add("Заметка 1", "проверка add")
-        service.add("Заметка 2", "проверка add")
-        service.add("Заметка 3", "проверка add")
+        service.add(Notes(title = "Заметка 1", text = "проверка add"))
+        service.add(Notes(title = "Заметка 2", text = "проверка add"))
+        service.add(Notes(title = "Заметка 3", text = "проверка add"))
 
         val result = arrayListOf<Notes>(service.getAllNotes()[0], service.getAllNotes()[2])
         assertEquals(result ,service.get(1,3))
@@ -104,8 +104,8 @@ class NoteServiceTest {
     @Test
     fun getByIdSuccess() {
         val service = NoteService()
-        service.add("Заметка 1", "проверка add")
-        service.add("Заметка 2", "проверка add")
+        service.add(Notes(title = "Заметка 1", text = "проверка add"))
+        service.add(Notes(title = "Заметка 2", text = "проверка add"))
 
         val result = (service.getAllNotes()[0])
 
@@ -121,8 +121,8 @@ class NoteServiceTest {
     @Test
     fun getCommentsSuccess() {
         val service = NoteService()
-        service.add("Заметка 1", "проверка add")
-        service.add("Заметка 2", "проверка add")
+        service.add(Notes(title = "Заметка 1", text = "проверка add"))
+        service.add(Notes(title = "Заметка 2", text = "проверка add"))
         service.createComment(1,"проверка createComment")
         service.createComment(2,"проверка createComment")
 
@@ -132,8 +132,8 @@ class NoteServiceTest {
     @Test
     fun restoreComment() {
         val service = NoteService()
-        service.add("Заметка 1", "проверка add")
-        service.add("Заметка 2", "проверка add")
+        service.add(Notes(title = "Заметка 1", text = "проверка add"))
+        service.add(Notes(title = "Заметка 2", text = "проверка add"))
         service.createComment(1,"проверка createComment")
         service.createComment(2,"проверка createComment")
         service.deleteСomment(2)
@@ -145,8 +145,8 @@ class NoteServiceTest {
     @Test(expected = NoObjectFoundById::class)
     fun restoreCommentFailDueNotDeletedComment() {
         val service = NoteService()
-        service.add("Заметка 1", "проверка add")
-        service.add("Заметка 2", "проверка add")
+        service.add(Notes(title = "Заметка 1", text = "проверка add"))
+        service.add(Notes(title = "Заметка 2", text = "проверка add"))
         service.createComment(1,"проверка createComment")
         service.createComment(2,"проверка createComment")
 

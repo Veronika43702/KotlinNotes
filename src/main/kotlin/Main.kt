@@ -1,31 +1,17 @@
-
-class NoteService {
+class NoteService: Functions<Notes> {
     private var idNote: Int = 1
     private var idComment: Int = 1
     private var notes = ArrayList<Notes>()
     private var comments = ArrayList<Comments>()
 
-    // добавление заметки
-    fun add(title: String, text: String, privacy: Int = 0): Int {
-        val note = Notes(idNote, title, text)
+    override fun add(note: Notes): Int {
+        val noteNew = note.copy(id = idNote)
         idNote += 1
-        notes += note
+        notes += noteNew
         return notes.last().id
     }
 
-    // создание комментария к заметке
-    fun createComment(note_id: Int, message: String): Int {
-        notes.find { it.id == note_id }
-            ?: throw NoObjectFoundById("Создание комментария невозможно, т.к. не существует заметки с id $note_id")
-
-        val comment = Comments(idComment, note_id, message)
-        idComment += 1
-        comments += comment
-        return comment.id
-    }
-
-    // удаление заметки
-    fun delete(note_id: Int): Int {
+    override fun delete(note_id: Int): Int {
         for ((index, note) in notes.withIndex()) {
             if (note.id == note_id) {
                 notes.remove(notes[index])
@@ -40,8 +26,21 @@ class NoteService {
         return throw NoObjectFoundById("Удаление заметки невозможно, т.к. не существует заметки с id $note_id")
     }
 
+
+    // создание комментария к заметке
+    override fun createComment(note_id: Int, message: String): Int {
+        notes.find { it.id == note_id }
+            ?: throw NoObjectFoundById("Создание комментария невозможно, т.к. не существует заметки с id $note_id")
+
+        val comment = Comments(idComment, note_id, message)
+        idComment += 1
+        comments += comment
+        return comment.id
+    }
+
+
     // удаление комментария
-    fun deleteСomment(comment_id: Int): Int {
+    override fun deleteСomment(comment_id: Int): Int {
         for ((index, comment) in comments.withIndex()) {
             if (comment.id == comment_id) {
                 comments.set(index, comments[index].copy(isExist = false))
@@ -52,7 +51,7 @@ class NoteService {
     }
 
     // редактирование заметки
-    fun edit(note_id: Int, title: String, text: String): Int {
+    override fun edit(note_id: Int, title: String, text: String): Int {
         for ((index, note) in notes.withIndex()) {
             if (note.id == note_id) {
                 notes.set(index, notes[index].copy(title = title, text = text))
@@ -64,7 +63,7 @@ class NoteService {
     }
 
     // редактирование коментария
-    fun editComment(comment_id: Int, message: String): Int {
+    override fun editComment(comment_id: Int, message: String): Int {
         for ((index, comment) in comments.withIndex()) {
             if (comment.id == comment_id && comment.isExist) {
                 comments.set(index, comments[index].copy(message = message))
@@ -78,7 +77,7 @@ class NoteService {
     }
 
     // возвращение списка заметок
-    fun get(vararg note_ids: Int): ArrayList<Notes> {
+    override fun get(vararg note_ids: Int): ArrayList<Notes> {
         val notesToGet = ArrayList<Notes>()
         note_ids.forEach {
             for (note in notes) {
@@ -91,7 +90,7 @@ class NoteService {
     }
 
     // возвращение заметки по Id
-    fun getById(note_id: Int): Notes {
+    override fun getById(note_id: Int): Notes {
         return notes.find { it.id == note_id }
             ?: throw NoObjectFoundById("Не существует заметки с id $note_id")
     }
@@ -110,7 +109,7 @@ class NoteService {
     }
 
     // восстановление удаленного комментария
-    fun restoreComment(comment_id: Int): Int {
+    override fun restoreComment(comment_id: Int): Int {
         for ((index, comment) in comments.withIndex()) {
             if (comment.id == comment_id && !comment.isExist) {
                 comments.set(index, comments[index].copy(isExist = true))
@@ -130,18 +129,22 @@ class NoteService {
     fun getAllComments(): ArrayList<Comments>{
         return comments
     }
+
+
 }
 
 
 fun main(args: Array<String>) {
     val service = NoteService()
-//    println(service.add("Заметка 1", "проверка add"))
-//    println(service.add("Заметка 2", "проверка add"))
-//    println(service.add("Заметка 3", "проверка add"))
+//    println(service.add(Notes(title = "Заметка 1", text = "проверка add")))
+//    println(service.add(Notes(title = "Заметка 2", text = "проверка add")))
+//    println(service.add(Notes(title = "Заметка 3", text = "проверка add")))
 //
+//    println(service.getAllNotes())
 //    service.createComment(2, "Коммент 1 к Заметке 2")
 //    service.createComment(1, "Коммент 1 к Заметке 1")
 //    println(service.delete(2))
+//    println(service.getAllNotes())
 //    service.edit(3, "Измененнная заметка", "проверка edit")
 //
 //    service.createComment(1, "Коммент 1 к Заметке 2")
